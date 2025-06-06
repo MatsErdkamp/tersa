@@ -1,25 +1,23 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { env } from '@/lib/env';
-import { handleError } from '@/lib/error/handle';
-import { createClient } from '@/lib/supabase/client';
-import { Turnstile } from '@marsidev/react-turnstile';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { type FormEventHandler, useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { env } from "@/lib/env";
+import { handleError } from "@/lib/error/handle";
+import { createClient } from "@/lib/supabase/client";
+import { Turnstile } from "@marsidev/react-turnstile";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { type FormEventHandler, useState } from "react";
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [captchaToken, setCaptchaToken] = useState<string | undefined>(
-    undefined
-  );
-  const disabled = isLoading || !email || !password || !captchaToken;
+
+  const disabled = isLoading || !email || !password;
 
   const handleEmailLogin: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -31,7 +29,7 @@ export const LoginForm = () => {
         email,
         password,
         options: {
-          captchaToken,
+          // captchaToken: "asljkdsajkldkljadsjkladsjkl",
         },
       });
 
@@ -40,9 +38,9 @@ export const LoginForm = () => {
       }
 
       // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push('/');
+      router.push("/");
     } catch (error: unknown) {
-      handleError('Error logging in with email', error);
+      handleError("Error logging in with email", error);
 
       setIsLoading(false);
     }
@@ -83,16 +81,16 @@ export const LoginForm = () => {
             />
           </div>
           <Button type="submit" className="w-full" disabled={disabled}>
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading ? "Logging in..." : "Login"}
           </Button>
         </div>
       </form>
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <Turnstile
           siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
           onSuccess={setCaptchaToken}
         />
-      </div>
+      </div> */}
     </>
   );
 };

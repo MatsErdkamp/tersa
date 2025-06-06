@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { updateProfileAction } from '@/app/actions/profile/update';
-import { Canvas } from '@/components/canvas';
-import type { ImageNodeProps } from '@/components/nodes/image';
-import type { TextNodeProps } from '@/components/nodes/text';
-import { Toolbar } from '@/components/toolbar';
-import { Button } from '@/components/ui/button';
-import { useUser } from '@/hooks/use-user';
-import { handleError } from '@/lib/error/handle';
-import { nodeButtons } from '@/lib/node-buttons';
-import { useProject } from '@/providers/project';
-import { useSubscription } from '@/providers/subscription';
-import { getIncomers, useReactFlow } from '@xyflow/react';
-import { PlayIcon } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { updateProfileAction } from "@/app/actions/profile/update";
+import { Canvas } from "@/components/canvas";
+import type { ImageNodeProps } from "@/components/nodes/image";
+import type { TextNodeProps } from "@/components/nodes/text";
+import { Toolbar } from "@/components/toolbar";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/hooks/use-user";
+import { handleError } from "@/lib/error/handle";
+import { nodeButtons } from "@/lib/node-buttons";
+import { useProject } from "@/providers/project";
+// import { useSubscription } from '@/providers/subscription';
+import { getIncomers, useReactFlow } from "@xyflow/react";
+import { PlayIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-const TextNode = nodeButtons.find((button) => button.id === 'text');
+const TextNode = nodeButtons.find((button) => button.id === "text");
 
 if (!TextNode) {
-  throw new Error('Text node not found');
+  throw new Error("Text node not found");
 }
 
 type WelcomeDemoProps = {
@@ -32,7 +32,7 @@ export const WelcomeDemo = ({ title, description }: WelcomeDemoProps) => {
   const project = useProject();
   const { getNodes, getEdges } = useReactFlow();
   const [started, setStarted] = useState(false);
-  const { isSubscribed } = useSubscription();
+  // const { isSubscribed } = useSubscription();
   const stepsContainerRef = useRef<HTMLDivElement>(null);
   const [hasTextNode, setHasTextNode] = useState(false);
   const [hasFilledTextNode, setHasFilledTextNode] = useState(false);
@@ -58,13 +58,13 @@ export const WelcomeDemo = ({ title, description }: WelcomeDemoProps) => {
         onboardedAt: new Date(),
       });
 
-      if ('error' in response) {
+      if ("error" in response) {
         throw new Error(response.error);
       }
 
       router.push(`/projects/${project.id}`);
     } catch (error) {
-      handleError('Error finishing onboarding', error);
+      handleError("Error finishing onboarding", error);
     }
   };
 
@@ -101,8 +101,8 @@ export const WelcomeDemo = ({ title, description }: WelcomeDemoProps) => {
     {
       instructions: (
         <>
-          First, click the{' '}
-          <TextNode.icon className="-translate-y-0.5 inline-block size-4 text-primary" />{' '}
+          First, click the{" "}
+          <TextNode.icon className="-translate-y-0.5 inline-block size-4 text-primary" />{" "}
           icon on the bottom toolbar. This will add a Text node to the canvas.
         </>
       ),
@@ -157,8 +157,8 @@ export const WelcomeDemo = ({ title, description }: WelcomeDemoProps) => {
       instructions: (
         <>
           That's all the information we need to generate an awesome image! Click
-          the Image node to select it, then press the{' '}
-          <PlayIcon className="-translate-y-0.5 inline-block size-4 text-primary" />{' '}
+          the Image node to select it, then press the{" "}
+          <PlayIcon className="-translate-y-0.5 inline-block size-4 text-primary" />{" "}
           button to generate content.
         </>
       ),
@@ -197,7 +197,7 @@ export const WelcomeDemo = ({ title, description }: WelcomeDemoProps) => {
     if (stepsContainerRef.current) {
       stepsContainerRef.current.scrollTo({
         top: stepsContainerRef.current.scrollHeight,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   }, [activeStep.instructions]);
@@ -207,7 +207,7 @@ export const WelcomeDemo = ({ title, description }: WelcomeDemoProps) => {
       const newEdges = getEdges();
       const newNodes = getNodes();
 
-      const textNodes = newNodes.filter((node) => node.type === 'text');
+      const textNodes = newNodes.filter((node) => node.type === "text");
 
       if (!textNodes.length) {
         setHasTextNode(false);
@@ -230,7 +230,7 @@ export const WelcomeDemo = ({ title, description }: WelcomeDemoProps) => {
         setHasFilledTextNode(false);
       }
 
-      const imageNodes = newNodes.filter((node) => node.type === 'image');
+      const imageNodes = newNodes.filter((node) => node.type === "image");
       const imageNode = imageNodes.at(0);
 
       if (!imageNode) {

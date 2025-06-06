@@ -1,19 +1,21 @@
-import { vercel } from '@t3-oss/env-core/presets-zod';
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { vercel } from "@t3-oss/env-core/presets-zod";
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   extends: [vercel()],
   server: {
-
-    SUPABASE_AUTH_HOOK_SECRET: z.string().min(1).startsWith('v1,whsec_'),
-
+    // SUPABASE_AUTH_HOOK_SECRET: z
+    //   .string()
+    //   .min(1)
+    //   .startsWith("v1,whsec_")
+    //   .optional(),
     // Supabase Integration
     POSTGRES_URL: z.string().url().min(1),
-    SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+    // SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
 
     // AI SDK
-    OPENAI_API_KEY: z.string().min(1).startsWith('sk-'),
+    OPENAI_API_KEY: z.string().min(1).startsWith("sk-"),
     // GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1),
     // GROQ_API_KEY: z.string().min(1).startsWith('gsk_'),
     // DEEPSEEK_API_KEY: z.string().min(1).startsWith('sk-'),
@@ -29,7 +31,6 @@ export const env = createEnv({
     // MISTRAL_API_KEY: z.string().min(1),
     // HUME_API_KEY: z.string().min(1),
     // LMNT_API_KEY: z.string().min(1),
-
     // // Other Models
     // MINIMAX_GROUP_ID: z.string().min(1),
     // MINIMAX_API_KEY: z.string().min(1),
@@ -38,40 +39,40 @@ export const env = createEnv({
     // BF_API_KEY: z.string().min(1),
   },
   client: {
-    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
+    // NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
     // Supabase Integration
     NEXT_PUBLIC_SUPABASE_URL: z.string().url().min(1),
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   },
   runtimeEnv: {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
-    GROQ_API_KEY: process.env.GROQ_API_KEY,
-    DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
-    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
-    XAI_API_KEY: process.env.XAI_API_KEY,
-    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
-    AWS_REGION: process.env.AWS_REGION,
-    FAL_API_KEY: process.env.FAL_API_KEY,
-    TOGETHER_AI_API_KEY: process.env.TOGETHER_AI_API_KEY,
-    COHERE_API_KEY: process.env.COHERE_API_KEY,
-    MISTRAL_API_KEY: process.env.MISTRAL_API_KEY,
+    // GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    // GROQ_API_KEY: process.env.GROQ_API_KEY,
+    // DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
+    // ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    // XAI_API_KEY: process.env.XAI_API_KEY,
+    // AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    // AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    // AWS_REGION: process.env.AWS_REGION,
+    // FAL_API_KEY: process.env.FAL_API_KEY,
+    // TOGETHER_AI_API_KEY: process.env.TOGETHER_AI_API_KEY,
+    // COHERE_API_KEY: process.env.COHERE_API_KEY,
+    // MISTRAL_API_KEY: process.env.MISTRAL_API_KEY,
     POSTGRES_URL: process.env.POSTGRES_URL,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-    MINIMAX_GROUP_ID: process.env.MINIMAX_GROUP_ID,
-    MINIMAX_API_KEY: process.env.MINIMAX_API_KEY,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    SUPABASE_AUTH_HOOK_SECRET: process.env.SUPABASE_AUTH_HOOK_SECRET,
-    RUNWAYML_API_SECRET: process.env.RUNWAYML_API_SECRET,
-    LUMAAI_API_KEY: process.env.LUMAAI_API_KEY,
-    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
-    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    VERCEL_API_KEY: process.env.VERCEL_API_KEY,
-    HUME_API_KEY: process.env.HUME_API_KEY,
-    LMNT_API_KEY: process.env.LMNT_API_KEY,
-    BF_API_KEY: process.env.BF_API_KEY,
+    // NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+    // MINIMAX_GROUP_ID: process.env.MINIMAX_GROUP_ID,
+    // MINIMAX_API_KEY: process.env.MINIMAX_API_KEY,
+    // SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    // SUPABASE_AUTH_HOOK_SECRET: process.env.SUPABASE_AUTH_HOOK_SECRET,
+    // RUNWAYML_API_SECRET: process.env.RUNWAYML_API_SECRET,
+    //  LUMAAI_API_KEY: process.env.LUMAAI_API_KEY,
+    // NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    // NEXT_PUBLIC_POSTHOG_HOST: process.env.
+    //    VERCEL_API_KEY: process.env.VERCEL_API_KEY,
+    //    HUME_API_KEY: process.env.HUME_API_KEY,
+    // LMNT_API_KEY: process.env.LMNT_API_KEY,
+    // BF_API_KEY: process.env.BF_API_KEY,
   },
 });

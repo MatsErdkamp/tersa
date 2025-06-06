@@ -1,32 +1,32 @@
-import { NodeLayout } from '@/components/nodes/layout';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Textarea } from '@/components/ui/textarea';
-import { useAnalytics } from '@/hooks/use-analytics';
-import { handleError } from '@/lib/error/handle';
-import { textModels } from '@/lib/models/text';
+import { NodeLayout } from "@/components/nodes/layout";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { useAnalytics } from "@/hooks/use-analytics";
+import { handleError } from "@/lib/error/handle";
+import { textModels } from "@/lib/models/text";
 import {
   getCodeFromCodeNodes,
   getDescriptionsFromImageNodes,
   getTextFromTextNodes,
   getTranscriptionFromAudioNodes,
-} from '@/lib/xyflow';
-import { useProject } from '@/providers/project';
-import { useChat } from '@ai-sdk/react';
-import Editor from '@monaco-editor/react';
-import { getIncomers, useReactFlow } from '@xyflow/react';
-import { ClockIcon, PlayIcon, RotateCcwIcon, SquareIcon } from 'lucide-react';
+} from "@/lib/xyflow";
+import { useProject } from "@/providers/project";
+import { useChat } from "@ai-sdk/react";
+import Editor from "@monaco-editor/react";
+import { getIncomers, useReactFlow } from "@xyflow/react";
+import { ClockIcon, PlayIcon, RotateCcwIcon, SquareIcon } from "lucide-react";
 import {
   type ChangeEventHandler,
   type ComponentProps,
   useCallback,
   useMemo,
-} from 'react';
-import { toast } from 'sonner';
-import { mutate } from 'swr';
-import type { CodeNodeProps } from '.';
-import { ModelSelector } from '../model-selector';
-import { LanguageSelector } from './language-selector';
+} from "react";
+import { toast } from "sonner";
+import { mutate } from "swr";
+import type { CodeNodeProps } from ".";
+import { ModelSelector } from "../model-selector";
+import { LanguageSelector } from "./language-selector";
 
 type CodeTransformProps = CodeNodeProps & {
   title: string;
@@ -38,7 +38,7 @@ const getDefaultModel = (models: typeof textModels) => {
     .find((model) => model.default);
 
   if (!defaultModel) {
-    throw new Error('No default model found');
+    throw new Error("No default model found");
   }
 
   return defaultModel;
@@ -53,15 +53,15 @@ export const CodeTransform = ({
   const { updateNodeData, getNodes, getEdges } = useReactFlow();
   const project = useProject();
   const modelId = data.model ?? getDefaultModel(textModels).id;
-  const language = data.generated?.language ?? 'javascript';
+  const language = data.generated?.language ?? "javascript";
   const analytics = useAnalytics();
   const { append, messages, setMessages, status, stop } = useChat({
-    api: '/api/code',
+    api: "/api/code",
     body: {
       modelId,
       language,
     },
-    onError: (error) => handleError('Error generating text', error),
+    onError: (error) => handleError("Error generating text", error),
     onFinish: (message) => {
       updateNodeData(id, {
         generated: {
@@ -70,9 +70,9 @@ export const CodeTransform = ({
         updatedAt: new Date().toISOString(),
       });
 
-      toast.success('Text generated successfully');
+      toast.success("Text generated successfully");
 
-      setTimeout(() => mutate('credits'), 5000);
+      setTimeout(() => mutate("credits"), 10);
     },
   });
 
@@ -90,20 +90,20 @@ export const CodeTransform = ({
       !imageDescriptions.length &&
       !data.instructions
     ) {
-      handleError('Error generating code', 'No prompts found');
+      handleError("Error generating code", "No prompts found");
       return;
     }
 
     const content = [
-      '--- Instructions ---',
-      data.instructions ?? 'None.',
-      '--- Text Prompts ---',
-      ...textPrompts.join('\n'),
-      '--- Audio Prompts ---',
-      ...audioPrompts.join('\n'),
-      '--- Image Descriptions ---',
-      ...imageDescriptions.join('\n'),
-      '--- Code Prompts ---',
+      "--- Instructions ---",
+      data.instructions ?? "None.",
+      "--- Text Prompts ---",
+      ...textPrompts.join("\n"),
+      "--- Audio Prompts ---",
+      ...audioPrompts.join("\n"),
+      "--- Image Descriptions ---",
+      ...imageDescriptions.join("\n"),
+      "--- Code Prompts ---",
       ...codePrompts.map(
         (code, index) =>
           `--- Prompt ${index + 1} ---
@@ -113,17 +113,17 @@ export const CodeTransform = ({
       ),
     ];
 
-    analytics.track('canvas', 'node', 'generate', {
+    analytics.track("canvas", "node", "generate", {
       type,
-      promptLength: content.join('\n').length,
+      promptLength: content.join("\n").length,
       model: modelId,
       instructionsLength: data.instructions?.length ?? 0,
     });
 
     setMessages([]);
     append({
-      role: 'user',
-      content: content.join('\n'),
+      role: "user",
+      content: content.join("\n"),
     });
   }, [
     data.instructions,
@@ -157,7 +157,7 @@ export const CodeTransform = ({
   );
 
   const toolbar = useMemo(() => {
-    const items: ComponentProps<typeof NodeLayout>['toolbar'] = [
+    const items: ComponentProps<typeof NodeLayout>["toolbar"] = [
       {
         children: (
           <LanguageSelector
@@ -180,9 +180,9 @@ export const CodeTransform = ({
       },
     ];
 
-    if (status === 'submitted' || status === 'streaming') {
+    if (status === "submitted" || status === "streaming") {
       items.push({
-        tooltip: 'Stop',
+        tooltip: "Stop",
         children: (
           <Button
             size="icon"
@@ -196,7 +196,7 @@ export const CodeTransform = ({
       });
     } else if (messages.length || data.generated?.text) {
       items.push({
-        tooltip: 'Regenerate',
+        tooltip: "Regenerate",
         children: (
           <Button
             size="icon"
@@ -210,7 +210,7 @@ export const CodeTransform = ({
       });
     } else {
       items.push({
-        tooltip: 'Generate',
+        tooltip: "Generate",
         children: (
           <Button
             size="icon"
@@ -226,9 +226,9 @@ export const CodeTransform = ({
 
     if (data.updatedAt) {
       items.push({
-        tooltip: `Last updated: ${new Intl.DateTimeFormat('en-US', {
-          dateStyle: 'short',
-          timeStyle: 'short',
+        tooltip: `Last updated: ${new Intl.DateTimeFormat("en-US", {
+          dateStyle: "short",
+          timeStyle: "short",
         }).format(new Date(data.updatedAt))}`,
         children: (
           <Button size="icon" variant="ghost" className="rounded-full">
@@ -253,7 +253,7 @@ export const CodeTransform = ({
     language,
   ]);
 
-  const nonUserMessages = messages.filter((message) => message.role !== 'user');
+  const nonUserMessages = messages.filter((message) => message.role !== "user");
 
   return (
     <NodeLayout id={id} data={data} title={title} type={type} toolbar={toolbar}>
@@ -280,7 +280,7 @@ export const CodeTransform = ({
         }}
       />
       <Textarea
-        value={data.instructions ?? ''}
+        value={data.instructions ?? ""}
         onChange={handleInstructionsChange}
         placeholder="Enter instructions"
         className="shrink-0 resize-none rounded-none border-none bg-transparent! shadow-none focus-visible:ring-0"

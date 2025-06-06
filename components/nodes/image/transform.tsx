@@ -1,36 +1,36 @@
-import { generateImageAction } from '@/app/actions/image/create';
-import { editImageAction } from '@/app/actions/image/edit';
-import { NodeLayout } from '@/components/nodes/layout';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Textarea } from '@/components/ui/textarea';
-import { useAnalytics } from '@/hooks/use-analytics';
-import { download } from '@/lib/download';
-import { handleError } from '@/lib/error/handle';
-import { imageModels } from '@/lib/models/image';
-import { getImagesFromImageNodes, getTextFromTextNodes } from '@/lib/xyflow';
-import { useProject } from '@/providers/project';
-import { getIncomers, useReactFlow } from '@xyflow/react';
+import { generateImageAction } from "@/app/actions/image/create";
+import { editImageAction } from "@/app/actions/image/edit";
+import { NodeLayout } from "@/components/nodes/layout";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { useAnalytics } from "@/hooks/use-analytics";
+import { download } from "@/lib/download";
+import { handleError } from "@/lib/error/handle";
+import { imageModels } from "@/lib/models/image";
+import { getImagesFromImageNodes, getTextFromTextNodes } from "@/lib/xyflow";
+import { useProject } from "@/providers/project";
+import { getIncomers, useReactFlow } from "@xyflow/react";
 import {
   ClockIcon,
   DownloadIcon,
   Loader2Icon,
   PlayIcon,
   RotateCcwIcon,
-} from 'lucide-react';
-import Image from 'next/image';
+} from "lucide-react";
+import Image from "next/image";
 import {
   type ChangeEventHandler,
   type ComponentProps,
   useCallback,
   useMemo,
   useState,
-} from 'react';
-import { toast } from 'sonner';
-import { mutate } from 'swr';
-import type { ImageNodeProps } from '.';
-import { ModelSelector } from '../model-selector';
-import { ImageSizeSelector } from './image-size-selector';
+} from "react";
+import { toast } from "sonner";
+import { mutate } from "swr";
+import type { ImageNodeProps } from ".";
+import { ModelSelector } from "../model-selector";
+import { ImageSizeSelector } from "./image-size-selector";
 
 type ImageTransformProps = ImageNodeProps & {
   title: string;
@@ -42,7 +42,7 @@ const getDefaultModel = (models: typeof imageModels) => {
     .find((model) => model.default);
 
   if (!defaultModel) {
-    throw new Error('No default model found');
+    throw new Error("No default model found");
   }
 
   return defaultModel;
@@ -88,12 +88,12 @@ export const ImageTransform = ({
 
     try {
       if (!textNodes.length && !imageNodes.length) {
-        throw new Error('No input provided');
+        throw new Error("No input provided");
       }
 
       setLoading(true);
 
-      analytics.track('canvas', 'node', 'generate', {
+      analytics.track("canvas", "node", "generate", {
         type,
         textPromptsLength: textNodes.length,
         imagePromptsLength: imageNodes.length,
@@ -111,7 +111,7 @@ export const ImageTransform = ({
             size,
           })
         : await generateImageAction({
-            prompt: textNodes.join('\n'),
+            prompt: textNodes.join("\n"),
             modelId,
             instructions: data.instructions,
             projectId: project.id,
@@ -119,17 +119,17 @@ export const ImageTransform = ({
             size,
           });
 
-      if ('error' in response) {
+      if ("error" in response) {
         throw new Error(response.error);
       }
 
       updateNodeData(id, response.nodeData);
 
-      toast.success('Image generated successfully');
+      toast.success("Image generated successfully");
 
-      setTimeout(() => mutate('credits'), 5000);
+      setTimeout(() => mutate("credits"), 10);
     } catch (error) {
-      handleError('Error generating image', error);
+      handleError("Error generating image", error);
     } finally {
       setLoading(false);
     }
@@ -151,8 +151,8 @@ export const ImageTransform = ({
     event
   ) => updateNodeData(id, { instructions: event.target.value });
 
-  const toolbar = useMemo<ComponentProps<typeof NodeLayout>['toolbar']>(() => {
-    const items: ComponentProps<typeof NodeLayout>['toolbar'] = [
+  const toolbar = useMemo<ComponentProps<typeof NodeLayout>["toolbar"]>(() => {
+    const items: ComponentProps<typeof NodeLayout>["toolbar"] = [
       {
         children: (
           <ModelSelector
@@ -170,7 +170,7 @@ export const ImageTransform = ({
       items.push({
         children: (
           <ImageSizeSelector
-            value={size ?? ''}
+            value={size ?? ""}
             options={selectedModel?.sizes ?? []}
             id={id}
             className="w-[200px] rounded-full"
@@ -183,7 +183,7 @@ export const ImageTransform = ({
     items.push(
       loading
         ? {
-            tooltip: 'Generating...',
+            tooltip: "Generating...",
             children: (
               <Button size="icon" className="rounded-full" disabled>
                 <Loader2Icon className="animate-spin" size={12} />
@@ -191,7 +191,7 @@ export const ImageTransform = ({
             ),
           }
         : {
-            tooltip: data.generated?.url ? 'Regenerate' : 'Generate',
+            tooltip: data.generated?.url ? "Regenerate" : "Generate",
             children: (
               <Button
                 size="icon"
@@ -211,13 +211,13 @@ export const ImageTransform = ({
 
     if (data.generated) {
       items.push({
-        tooltip: 'Download',
+        tooltip: "Download",
         children: (
           <Button
             variant="ghost"
             size="icon"
             className="rounded-full"
-            onClick={() => download(data.generated, id, 'png')}
+            onClick={() => download(data.generated, id, "png")}
           >
             <DownloadIcon size={12} />
           </Button>
@@ -227,9 +227,9 @@ export const ImageTransform = ({
 
     if (data.updatedAt) {
       items.push({
-        tooltip: `Last updated: ${new Intl.DateTimeFormat('en-US', {
-          dateStyle: 'short',
-          timeStyle: 'short',
+        tooltip: `Last updated: ${new Intl.DateTimeFormat("en-US", {
+          dateStyle: "short",
+          timeStyle: "short",
         }).format(new Date(data.updatedAt))}`,
         children: (
           <Button size="icon" variant="ghost" className="rounded-full">
@@ -256,10 +256,10 @@ export const ImageTransform = ({
 
   const aspectRatio = useMemo(() => {
     if (!data.size) {
-      return '1/1';
+      return "1/1";
     }
 
-    const [width, height] = data.size.split('x').map(Number);
+    const [width, height] = data.size.split("x").map(Number);
     return `${width}/${height}`;
   }, [data.size]);
 
@@ -297,7 +297,7 @@ export const ImageTransform = ({
         />
       )}
       <Textarea
-        value={data.instructions ?? ''}
+        value={data.instructions ?? ""}
         onChange={handleInstructionsChange}
         placeholder="Enter instructions"
         className="shrink-0 resize-none rounded-none border-none bg-transparent! shadow-none focus-visible:ring-0"
