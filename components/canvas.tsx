@@ -937,21 +937,6 @@ const ProjectCanvas = ({ children, userData, ...props }: CanvasProps) => {
                   onDoubleClick={addDropNode}
                   {...rest}
                 >
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 10,
-                      left: 10,
-                      zIndex: 100,
-                      background: "rgba(255, 255, 255, 0.8)",
-                      padding: "5px",
-                      border: "1px solid black",
-                      borderRadius: "5px",
-                      fontSize: "10px",
-                    }}
-                  >
-                    Yjs Client ID: {ydocRef.current?.clientID}
-                  </div>
                   <Background />
                   <CursorOverlay />
                   {children}

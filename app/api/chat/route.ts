@@ -1,7 +1,7 @@
 import { getSubscribedUser } from "@/lib/auth";
 import { parseError } from "@/lib/error/parse";
 import { textModels } from "@/lib/models/text";
-import { createRateLimiter, slidingWindow } from "@/lib/rate-limit";
+// import { createRateLimiter, slidingWindow } from "@/lib/rate-limit";
 import { trackCreditUsage } from "@/lib/stripe";
 import { streamText } from "ai";
 

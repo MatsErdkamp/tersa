@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   DropdownMenu,
@@ -7,17 +7,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useUser } from '@/hooks/use-user';
-import { createClient } from '@/lib/supabase/client';
-import { useSubscription } from '@/providers/subscription';
-import { ArrowUpRight, ArrowUpRightIcon, Loader2 } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { type MouseEventHandler, useState } from 'react';
-import { Profile } from './profile';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
+} from "@/components/ui/dropdown-menu";
+import { useUser } from "@/hooks/use-user";
+import { createClient } from "@/lib/supabase/client";
+import { useSubscription } from "@/providers/subscription";
+import { ArrowUpRight, ArrowUpRightIcon, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { type MouseEventHandler, useState } from "react";
+import { Profile } from "./profile";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
 
 export const Menu = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -29,7 +29,7 @@ export const Menu = () => {
   const logout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push('/auth/login');
+    router.push("/auth/login");
   };
 
   const handleOpenProfile: MouseEventHandler<HTMLDivElement> = (event) => {
@@ -59,9 +59,9 @@ export const Menu = () => {
               <AvatarImage src={user.user_metadata.avatar} />
               <AvatarFallback className="bg-primary text-primary-foreground uppercase">
                 {(user.user_metadata.name ?? user.email ?? user.id)
-                  ?.split(' ')
+                  ?.split(" ")
                   .map((name: string) => name.at(0))
-                  .join('')}
+                  .join("")}
               </AvatarFallback>
             </Avatar>
           </Button>
@@ -78,9 +78,9 @@ export const Menu = () => {
               <AvatarImage src={user.user_metadata.avatar} />
               <AvatarFallback className="bg-primary text-primary-foreground uppercase">
                 {(user.user_metadata.name ?? user.email ?? user.id)
-                  ?.split(' ')
+                  ?.split(" ")
                   .map((name: string) => name.at(0))
-                  .join('')}
+                  .join("")}
               </AvatarFallback>
             </Avatar>
             <p className="mt-2 truncate">
@@ -99,7 +99,7 @@ export const Menu = () => {
           {isSubscribed && (
             <DropdownMenuItem asChild className="justify-between">
               <a href="/api/portal" target="_blank" rel="noopener noreferrer">
-                Billing{' '}
+                Billing{" "}
                 <ArrowUpRightIcon size={16} className="text-muted-foreground" />
               </a>
             </DropdownMenuItem>
@@ -111,17 +111,6 @@ export const Menu = () => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <a
-              href="https://github.com/haydenbleasel/tersa"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between"
-            >
-              <span>Send feedback</span>
-              <ArrowUpRight size={16} className="text-muted-foreground" />
-            </a>
-          </DropdownMenuItem>
           <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

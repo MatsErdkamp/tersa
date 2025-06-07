@@ -7,17 +7,6 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 export const CollaborativeUsers = () => {
   const users = useCollaborativeUsers();
 
-  console.log("CollaborativeUsers - users:", users);
-
-  // Show component even with 1 user for debugging
-  if (users.length === 0) {
-    return (
-      <div className="flex items-center rounded-full border bg-card/90 p-1 drop-shadow-xs backdrop-blur-sm">
-        <span className="text-xs text-muted-foreground px-2">No users</span>
-      </div>
-    );
-  }
-
   return (
     <div className="flex items-center rounded-full border bg-card/90 p-1 drop-shadow-xs backdrop-blur-sm">
       <AvatarStack animate={true} size={32}>
@@ -36,9 +25,6 @@ export const CollaborativeUsers = () => {
           </Avatar>
         ))}
       </AvatarStack>
-      <span className="text-xs text-muted-foreground ml-2">
-        {users.length} user{users.length !== 1 ? "s" : ""}
-      </span>
     </div>
   );
 };

@@ -529,14 +529,6 @@
 
 #### ⚠️ Pushed to `main`
 
-- Send feedback to GitHub ([@haydenbleasel](https://github.com/haydenbleasel))
-
-#### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
 # v1.0.18 (Thu May 15 2025)
 
 #### ⚠️ Pushed to `main`
