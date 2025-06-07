@@ -37,14 +37,13 @@ const AuthenticatedLayout = async ({ children }: AuthenticatedLayoutProps) => {
   plan = "pro";
 
   return (
-    // <SubscriptionProvider
-    //   isSubscribed={Boolean(profile.subscriptionId)}
-    //   plan={plan}
-    // >
-    // <PostHogIdentifyProvider>
-    <ReactFlowProvider>{children}</ReactFlowProvider>
-    // {/* </PostHogIdentifyProvider> */}
-    // {/* </SubscriptionProvider> */}
+    <SubscriptionProvider
+      isSubscribed={Boolean(profile.subscriptionId)}
+      plan={plan}
+    >
+      {/* <PostHogIdentifyProvider> </PostHogIdentifyProvider> */}
+      <ReactFlowProvider>{children}</ReactFlowProvider>
+    </SubscriptionProvider>
   );
 };
 

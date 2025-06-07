@@ -92,7 +92,7 @@ export const useCurrentUser = () => {
 // New hook to get current collaborative users
 export const useCollaborativeUsers = () => {
   const awareness = useYjsAwareness();
-  const currentUser = useCurrentUser();
+  const currentUser = useContext(UserContext);
   const [users, setUsers] = useState<
     Array<{
       id: string;

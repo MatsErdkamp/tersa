@@ -1,6 +1,6 @@
 "use client";
 
-import { useYjsAwareness, useCurrentUser } from "./canvas";
+import { useYjsAwareness, UserContext } from "./canvas";
 import {
   Cursor,
   CursorPointer,
@@ -15,6 +15,7 @@ import {
   useCallback,
   useRef,
   useLayoutEffect,
+  useContext,
 } from "react";
 import { useReactFlow } from "@xyflow/react";
 import * as Y from "yjs";
@@ -48,7 +49,14 @@ const colors = [
 
 export const CursorOverlay = () => {
   const awareness = useYjsAwareness();
-  const currentUser = useCurrentUser();
+
+  // Use useContext directly to avoid throwing an error if user data is not available
+  const currentUser = useContext(UserContext);
+
+  // Don't render if user data is not available
+  if (!currentUser) {
+    return null;
+  }
   const { screenToFlowPosition, flowToScreenPosition } = useReactFlow();
   const [cursors, setCursors] = useState<Record<string, UserCursor>>({});
 

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: "Create and share AI workflows",
 };
 
-export const maxDuration = 60; // 13 minutes
+export const maxDuration = 60; // 1 minute (hobby plan limit)
 
 type ProjectProps = {
   params: Promise<{
