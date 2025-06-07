@@ -103,7 +103,7 @@ export const useCollaborativeUsers = () => {
   >([]);
 
   useEffect(() => {
-    if (!awareness) return;
+    if (!awareness || !currentUser) return;
 
     const handleAwarenessChange = () => {
       const states = awareness.getStates();
@@ -135,7 +135,7 @@ export const useCollaborativeUsers = () => {
     return () => {
       awareness.off("change", handleAwarenessChange);
     };
-  }, [awareness]);
+  }, [awareness, currentUser]);
 
   return users;
 };
