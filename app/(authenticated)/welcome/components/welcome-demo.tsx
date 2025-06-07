@@ -10,7 +10,7 @@ import { useUser } from "@/hooks/use-user";
 import { handleError } from "@/lib/error/handle";
 import { nodeButtons } from "@/lib/node-buttons";
 import { useProject } from "@/providers/project";
-// import { useSubscription } from '@/providers/subscription';
+import { useSubscription } from "@/providers/subscription";
 import { getIncomers, useReactFlow } from "@xyflow/react";
 import { PlayIcon } from "lucide-react";
 import Link from "next/link";
@@ -32,7 +32,7 @@ export const WelcomeDemo = ({ title, description }: WelcomeDemoProps) => {
   const project = useProject();
   const { getNodes, getEdges } = useReactFlow();
   const [started, setStarted] = useState(false);
-  // const { isSubscribed } = useSubscription();
+  const { isSubscribed } = useSubscription();
   const stepsContainerRef = useRef<HTMLDivElement>(null);
   const [hasTextNode, setHasTextNode] = useState(false);
   const [hasFilledTextNode, setHasFilledTextNode] = useState(false);

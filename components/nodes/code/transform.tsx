@@ -27,6 +27,7 @@ import { mutate } from "swr";
 import type { CodeNodeProps } from ".";
 import { ModelSelector } from "../model-selector";
 import { LanguageSelector } from "./language-selector";
+import { useNodeOperations } from "@/providers/node-operations";
 
 type CodeTransformProps = CodeNodeProps & {
   title: string;
@@ -50,7 +51,8 @@ export const CodeTransform = ({
   type,
   title,
 }: CodeTransformProps) => {
-  const { updateNodeData, getNodes, getEdges } = useReactFlow();
+  const { getNodes, getEdges } = useReactFlow();
+  const { updateNodeData } = useNodeOperations();
   const project = useProject();
   const modelId = data.model ?? getDefaultModel(textModels).id;
   const language = data.generated?.language ?? "javascript";

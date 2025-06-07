@@ -1,31 +1,32 @@
-import { generateSpeechAction } from '@/app/actions/speech/create';
-import { NodeLayout } from '@/components/nodes/layout';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Textarea } from '@/components/ui/textarea';
-import { useAnalytics } from '@/hooks/use-analytics';
-import { download } from '@/lib/download';
-import { handleError } from '@/lib/error/handle';
-import { speechModels } from '@/lib/models/speech';
-import { capitalize } from '@/lib/utils';
+import { generateSpeechAction } from "@/app/actions/speech/create";
+import { NodeLayout } from "@/components/nodes/layout";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { useAnalytics } from "@/hooks/use-analytics";
+import { download } from "@/lib/download";
+import { handleError } from "@/lib/error/handle";
+import { speechModels } from "@/lib/models/speech";
+import { capitalize } from "@/lib/utils";
 import {
   getDescriptionsFromImageNodes,
   getTextFromTextNodes,
-} from '@/lib/xyflow';
-import { useProject } from '@/providers/project';
-import { getIncomers, useReactFlow } from '@xyflow/react';
+} from "@/lib/xyflow";
+import { useProject } from "@/providers/project";
+import { getIncomers, useReactFlow } from "@xyflow/react";
 import {
   ClockIcon,
   DownloadIcon,
   Loader2Icon,
   PlayIcon,
   RotateCcwIcon,
-} from 'lucide-react';
-import { type ChangeEventHandler, type ComponentProps, useState } from 'react';
-import { toast } from 'sonner';
-import { mutate } from 'swr';
-import type { AudioNodeProps } from '.';
-import { ModelSelector } from '../model-selector';
+} from "lucide-react";
+import { type ChangeEventHandler, type ComponentProps, useState } from "react";
+import { toast } from "sonner";
+import { mutate } from "swr";
+import type { AudioNodeProps } from ".";
+import { ModelSelector } from "../model-selector";
+import { useNodeOperations } from "@/providers/node-operations";
 
 type AudioTransformProps = AudioNodeProps & {
   title: string;
@@ -37,7 +38,7 @@ const getDefaultModel = (models: typeof speechModels) => {
     .find((model) => model.default);
 
   if (!defaultModel) {
-    throw new Error('No default model found');
+    throw new Error("No default model found");
   }
 
   return defaultModel;
@@ -49,7 +50,8 @@ export const AudioTransform = ({
   type,
   title,
 }: AudioTransformProps) => {
-  const { updateNodeData, getNodes, getEdges } = useReactFlow();
+  const { getNodes, getEdges } = useReactFlow();
+  const { updateNodeData } = useNodeOperations();
   const [loading, setLoading] = useState(false);
   const project = useProject();
   const modelId = data.model ?? getDefaultModel(speechModels).id;
@@ -69,12 +71,12 @@ export const AudioTransform = ({
       const imagePrompts = getDescriptionsFromImageNodes(incomers);
 
       if (!textPrompts.length && !imagePrompts.length && !data.instructions) {
-        throw new Error('No prompts found');
+        throw new Error("No prompts found");
       }
 
       setLoading(true);
 
-      let text = [...textPrompts, ...imagePrompts].join('\n');
+      let text = [...textPrompts, ...imagePrompts].join("\n");
       let instructions = data.instructions;
 
       if (data.instructions && !text.length) {
@@ -82,7 +84,7 @@ export const AudioTransform = ({
         instructions = undefined;
       }
 
-      analytics.track('canvas', 'node', 'generate', {
+      analytics.track("canvas", "node", "generate", {
         type,
         promptLength: text.length,
         model: modelId,
@@ -99,23 +101,23 @@ export const AudioTransform = ({
         instructions,
       });
 
-      if ('error' in response) {
+      if ("error" in response) {
         throw new Error(response.error);
       }
 
       updateNodeData(id, response.nodeData);
 
-      toast.success('Audio generated successfully');
+      toast.success("Audio generated successfully");
 
-      setTimeout(() => mutate('credits'), 5000);
+      setTimeout(() => mutate("credits"), 5000);
     } catch (error) {
-      handleError('Error generating audio', error);
+      handleError("Error generating audio", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const toolbar: ComponentProps<typeof NodeLayout>['toolbar'] = [
+  const toolbar: ComponentProps<typeof NodeLayout>["toolbar"] = [
     {
       children: (
         <ModelSelector
@@ -154,7 +156,7 @@ export const AudioTransform = ({
   toolbar.push(
     loading
       ? {
-          tooltip: 'Generating...',
+          tooltip: "Generating...",
           children: (
             <Button size="icon" className="rounded-full" disabled>
               <Loader2Icon className="animate-spin" size={12} />
@@ -162,7 +164,7 @@ export const AudioTransform = ({
           ),
         }
       : {
-          tooltip: data.generated?.url ? 'Regenerate' : 'Generate',
+          tooltip: data.generated?.url ? "Regenerate" : "Generate",
           children: (
             <Button
               size="icon"
@@ -182,13 +184,13 @@ export const AudioTransform = ({
 
   if (data.generated) {
     toolbar.push({
-      tooltip: 'Download',
+      tooltip: "Download",
       children: (
         <Button
           variant="ghost"
           size="icon"
           className="rounded-full"
-          onClick={() => download(data.generated, id, 'mp3')}
+          onClick={() => download(data.generated, id, "mp3")}
         >
           <DownloadIcon size={12} />
         </Button>
@@ -198,9 +200,9 @@ export const AudioTransform = ({
 
   if (data.updatedAt) {
     toolbar.push({
-      tooltip: `Last updated: ${new Intl.DateTimeFormat('en-US', {
-        dateStyle: 'short',
-        timeStyle: 'short',
+      tooltip: `Last updated: ${new Intl.DateTimeFormat("en-US", {
+        dateStyle: "short",
+        timeStyle: "short",
       }).format(new Date(data.updatedAt))}`,
       children: (
         <Button size="icon" variant="ghost" className="rounded-full">
@@ -241,7 +243,7 @@ export const AudioTransform = ({
         />
       )}
       <Textarea
-        value={data.instructions ?? ''}
+        value={data.instructions ?? ""}
         onChange={handleInstructionsChange}
         placeholder="Enter instructions"
         className="shrink-0 resize-none rounded-none border-none bg-transparent! shadow-none focus-visible:ring-0"

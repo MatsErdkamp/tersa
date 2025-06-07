@@ -31,7 +31,7 @@ import { mutate } from "swr";
 import type { ImageNodeProps } from ".";
 import { ModelSelector } from "../model-selector";
 import { ImageSizeSelector } from "./image-size-selector";
-
+import { useNodeOperations } from "@/providers/node-operations";
 type ImageTransformProps = ImageNodeProps & {
   title: string;
 };
@@ -54,7 +54,8 @@ export const ImageTransform = ({
   type,
   title,
 }: ImageTransformProps) => {
-  const { updateNodeData, getNodes, getEdges } = useReactFlow();
+  const { updateNodeData } = useNodeOperations();
+  const { getNodes, getEdges } = useReactFlow();
   const [loading, setLoading] = useState(false);
   const project = useProject();
   const hasIncomingImageNodes =

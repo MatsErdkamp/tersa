@@ -1,9 +1,9 @@
-import { currentUser } from '@/lib/auth';
-import { database } from '@/lib/database';
-import { projects } from '@/schema';
-import { eq } from 'drizzle-orm';
-import { ProjectSelector } from './project-selector';
-import { ProjectSettings } from './project-settings';
+import { currentUser } from "@/lib/auth";
+import { database } from "@/lib/database";
+import { projects } from "@/schema";
+import { eq, or, arrayContains } from "drizzle-orm";
+import { ProjectSelector } from "./project-selector";
+import { ProjectSettings } from "./project-settings";
 
 type TopLeftProps = {
   id: string;
@@ -17,7 +17,10 @@ export const TopLeft = async ({ id }: TopLeftProps) => {
   }
 
   const allProjects = await database.query.projects.findMany({
-    where: eq(projects.userId, user.id),
+    where: or(
+      eq(projects.userId, user.id),
+      user.email ? arrayContains(projects.members, [user.email]) : undefined
+    ),
   });
 
   if (!allProjects.length) {

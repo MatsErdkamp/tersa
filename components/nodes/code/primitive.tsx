@@ -1,9 +1,9 @@
-import Editor from '@monaco-editor/react';
-import { useReactFlow } from '@xyflow/react';
-import type { ComponentProps } from 'react';
-import type { CodeNodeProps } from '.';
-import { NodeLayout } from '../layout';
-import { LanguageSelector } from './language-selector';
+import Editor from "@monaco-editor/react";
+import { useReactFlow } from "@xyflow/react";
+import type { ComponentProps } from "react";
+import type { CodeNodeProps } from ".";
+import { NodeLayout } from "../layout";
+import { LanguageSelector } from "./language-selector";
 
 type CodePrimitiveProps = CodeNodeProps & {
   title: string;
@@ -29,11 +29,11 @@ export const CodePrimitive = ({
     });
   };
 
-  const toolbar: ComponentProps<typeof NodeLayout>['toolbar'] = [
+  const toolbar: ComponentProps<typeof NodeLayout>["toolbar"] = [
     {
       children: (
         <LanguageSelector
-          value={data.content?.language ?? 'javascript'}
+          value={data.content?.language ?? "javascript"}
           onChange={handleLanguageChange}
           className="w-[200px] rounded-full"
         />

@@ -1,16 +1,16 @@
-import { NodeLayout } from '@/components/nodes/layout';
+import { NodeLayout } from "@/components/nodes/layout";
 import {
   Dropzone,
   DropzoneContent,
   DropzoneEmptyState,
-} from '@/components/ui/kibo-ui/dropzone';
-import { Skeleton } from '@/components/ui/skeleton';
-import { handleError } from '@/lib/error/handle';
-import { uploadFile } from '@/lib/upload';
-import { useReactFlow } from '@xyflow/react';
-import { Loader2Icon } from 'lucide-react';
-import { useState } from 'react';
-import type { VideoNodeProps } from '.';
+} from "@/components/ui/kibo-ui/dropzone";
+import { Skeleton } from "@/components/ui/skeleton";
+import { handleError } from "@/lib/error/handle";
+import { uploadFile } from "@/lib/upload";
+import { useReactFlow } from "@xyflow/react";
+import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
+import type { VideoNodeProps } from ".";
 
 type VideoPrimitiveProps = VideoNodeProps & {
   title: string;
@@ -33,14 +33,14 @@ export const VideoPrimitive = ({
 
     try {
       if (!files.length) {
-        throw new Error('No file selected');
+        throw new Error("No file selected");
       }
 
       setIsUploading(true);
       setFiles(files);
 
       const [file] = files;
-      const { url, type } = await uploadFile(file, 'files');
+      const { url, type } = await uploadFile(file, "files");
 
       updateNodeData(id, {
         content: {
@@ -49,7 +49,7 @@ export const VideoPrimitive = ({
         },
       });
     } catch (error) {
-      handleError('Error uploading video', error);
+      handleError("Error uploading video", error);
     } finally {
       setIsUploading(false);
     }
@@ -81,7 +81,7 @@ export const VideoPrimitive = ({
           maxFiles={1}
           multiple={false}
           accept={{
-            'video/*': [],
+            "video/*": [],
           }}
           onDrop={handleDrop}
           src={files}

@@ -4,20 +4,20 @@ import {
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
-} from '@/components/ui/context-menu';
+} from "@/components/ui/context-menu";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
-import { useNodeOperations } from '@/providers/node-operations';
-import { Handle, Position, useReactFlow } from '@xyflow/react';
-import { CodeIcon, CopyIcon, EyeIcon, TrashIcon } from 'lucide-react';
-import { type ReactNode, useState } from 'react';
-import { NodeToolbar } from './toolbar';
+} from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import { useNodeOperations } from "@/providers/node-operations";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
+import { CodeIcon, CopyIcon, EyeIcon, TrashIcon } from "lucide-react";
+import { type ReactNode, useState } from "react";
+import { NodeToolbar } from "./toolbar";
 
 type NodeLayoutProps = {
   children: ReactNode;
@@ -45,8 +45,8 @@ export const NodeLayout = ({
   title,
   className,
 }: NodeLayoutProps) => {
-  const { deleteElements, setCenter, getNode, updateNode } = useReactFlow();
-  const { duplicateNode } = useNodeOperations();
+  const { deleteElements, setCenter, getNode } = useReactFlow();
+  const { duplicateNode, updateNodeData } = useNodeOperations();
   const [showData, setShowData] = useState(false);
 
   const handleFocus = () => {
@@ -88,7 +88,7 @@ export const NodeLayout = ({
     }
 
     if (!node.selected) {
-      updateNode(id, { selected: true });
+      updateNodeData(id, { selected: true });
     }
   };
 
@@ -96,14 +96,14 @@ export const NodeLayout = ({
     <>
       <ContextMenu onOpenChange={handleSelect}>
         <ContextMenuTrigger>
-          {type !== 'drop' && toolbar?.length && (
+          {type !== "drop" && toolbar?.length && (
             <NodeToolbar id={id} items={toolbar} />
           )}
-          {type !== 'file' && type !== 'tweet' && (
+          {type !== "file" && type !== "tweet" && (
             <Handle type="target" position={Position.Left} />
           )}
           <div className="relative size-full h-auto w-sm">
-            {type !== 'drop' && (
+            {type !== "drop" && (
               <div className="-translate-y-full -top-2 absolute right-0 left-0 flex shrink-0 items-center justify-between">
                 <p className="font-mono text-muted-foreground text-xs tracking-tighter">
                   {title}
@@ -112,7 +112,7 @@ export const NodeLayout = ({
             )}
             <div
               className={cn(
-                'node-container flex size-full flex-col divide-y rounded-[28px] bg-card p-2 ring-1 ring-border transition-all',
+                "node-container flex size-full flex-col divide-y rounded-[28px] bg-card p-2 ring-1 ring-border transition-all",
                 className
               )}
             >
@@ -121,7 +121,7 @@ export const NodeLayout = ({
               </div>
             </div>
           </div>
-          {type !== 'video' && (
+          {type !== "video" && (
             <Handle type="source" position={Position.Right} />
           )}
         </ContextMenuTrigger>
@@ -139,7 +139,7 @@ export const NodeLayout = ({
             <TrashIcon size={12} />
             <span>Delete</span>
           </ContextMenuItem>
-          {process.env.NODE_ENV === 'development' && (
+          {process.env.NODE_ENV === "development" && (
             <>
               <ContextMenuSeparator />
               <ContextMenuItem onClick={handleShowData}>
@@ -155,7 +155,7 @@ export const NodeLayout = ({
           <DialogHeader>
             <DialogTitle>Node data</DialogTitle>
             <DialogDescription>
-              Data for node{' '}
+              Data for node{" "}
               <code className="rounded-sm bg-secondary px-2 py-1 font-mono">
                 {id}
               </code>

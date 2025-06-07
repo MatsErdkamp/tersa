@@ -1,15 +1,15 @@
-import { NodeLayout } from '@/components/nodes/layout';
+import { NodeLayout } from "@/components/nodes/layout";
 import {
   Dropzone,
   DropzoneContent,
   DropzoneEmptyState,
-} from '@/components/ui/kibo-ui/dropzone';
-import { handleError } from '@/lib/error/handle';
-import { uploadFile } from '@/lib/upload';
-import { useReactFlow } from '@xyflow/react';
-import { FileIcon, Loader2Icon } from 'lucide-react';
-import { useState } from 'react';
-import type { FileNodeProps } from '.';
+} from "@/components/ui/kibo-ui/dropzone";
+import { handleError } from "@/lib/error/handle";
+import { uploadFile } from "@/lib/upload";
+import { useReactFlow } from "@xyflow/react";
+import { FileIcon, Loader2Icon } from "lucide-react";
+import { useState } from "react";
+import type { FileNodeProps } from ".";
 
 type FilePrimitiveProps = FileNodeProps & {
   title: string;
@@ -19,13 +19,17 @@ const FilePreview = ({
   name,
   type,
   url,
-}: { name: string; type: string; url: string }) => (
+}: {
+  name: string;
+  type: string;
+  url: string;
+}) => (
   <div className="flex flex-col gap-2">
     <div className="flex items-center gap-2">
       <FileIcon size={16} className="text-muted-foreground" />
       <span className="truncate font-medium text-sm">{name}</span>
     </div>
-    {type === 'application/pdf' ? (
+    {type === "application/pdf" ? (
       <div className="relative aspect-[3/4] w-full overflow-hidden rounded border">
         <iframe
           src={`${url}#view=FitH`}
@@ -66,26 +70,26 @@ export const FilePrimitive = ({
 
     try {
       if (!files.length) {
-        throw new Error('No file selected');
+        throw new Error("No file selected");
       }
 
-      if (files.some((file) => file.type.startsWith('audio'))) {
-        throw new Error('Please use the audio node to upload audio files.');
+      if (files.some((file) => file.type.startsWith("audio"))) {
+        throw new Error("Please use the audio node to upload audio files.");
       }
 
-      if (files.some((file) => file.type.startsWith('video'))) {
-        throw new Error('Please use the video node to upload video files.');
+      if (files.some((file) => file.type.startsWith("video"))) {
+        throw new Error("Please use the video node to upload video files.");
       }
 
-      if (files.some((file) => file.type.startsWith('image'))) {
-        throw new Error('Please use the image node to upload image files.');
+      if (files.some((file) => file.type.startsWith("image"))) {
+        throw new Error("Please use the image node to upload image files.");
       }
 
       setIsUploading(true);
       setFiles(files);
       const [file] = files;
 
-      const { url, type } = await uploadFile(file, 'files');
+      const { url, type } = await uploadFile(file, "files");
 
       updateNodeData(id, {
         content: {
@@ -95,7 +99,7 @@ export const FilePrimitive = ({
         },
       });
     } catch (error) {
-      handleError('Error uploading video', error);
+      handleError("Error uploading video", error);
     } finally {
       setIsUploading(false);
     }

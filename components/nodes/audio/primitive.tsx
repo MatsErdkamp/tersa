@@ -1,18 +1,18 @@
-import { transcribeAction } from '@/app/actions/speech/transcribe';
-import { NodeLayout } from '@/components/nodes/layout';
+import { transcribeAction } from "@/app/actions/speech/transcribe";
+import { NodeLayout } from "@/components/nodes/layout";
 import {
   Dropzone,
   DropzoneContent,
   DropzoneEmptyState,
-} from '@/components/ui/kibo-ui/dropzone';
-import { Skeleton } from '@/components/ui/skeleton';
-import { handleError } from '@/lib/error/handle';
-import { uploadFile } from '@/lib/upload';
-import { useProject } from '@/providers/project';
-import { useReactFlow } from '@xyflow/react';
-import { Loader2Icon } from 'lucide-react';
-import { useState } from 'react';
-import type { AudioNodeProps } from '.';
+} from "@/components/ui/kibo-ui/dropzone";
+import { Skeleton } from "@/components/ui/skeleton";
+import { handleError } from "@/lib/error/handle";
+import { uploadFile } from "@/lib/upload";
+import { useProject } from "@/providers/project";
+import { useReactFlow } from "@xyflow/react";
+import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
+import type { AudioNodeProps } from ".";
 
 type AudioPrimitiveProps = AudioNodeProps & {
   title: string;
@@ -36,14 +36,14 @@ export const AudioPrimitive = ({
 
     try {
       if (!files.length) {
-        throw new Error('No file selected');
+        throw new Error("No file selected");
       }
 
       setIsUploading(true);
       setFiles(files);
       const [file] = files;
 
-      const { url, type } = await uploadFile(file, 'files');
+      const { url, type } = await uploadFile(file, "files");
 
       updateNodeData(id, {
         content: {
@@ -54,7 +54,7 @@ export const AudioPrimitive = ({
 
       const response = await transcribeAction(url, project?.id);
 
-      if ('error' in response) {
+      if ("error" in response) {
         throw new Error(response.error);
       }
 
@@ -62,7 +62,7 @@ export const AudioPrimitive = ({
         transcript: response.transcript,
       });
     } catch (error) {
-      handleError('Error uploading video', error);
+      handleError("Error uploading video", error);
     } finally {
       setIsUploading(false);
     }
@@ -93,7 +93,7 @@ export const AudioPrimitive = ({
           maxFiles={1}
           multiple={false}
           accept={{
-            'audio/*': [],
+            "audio/*": [],
           }}
           onDrop={handleDrop}
           src={files}

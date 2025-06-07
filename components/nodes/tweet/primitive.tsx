@@ -1,14 +1,14 @@
-import { getTweetData } from '@/app/actions/tweet/get';
-import { NodeLayout } from '@/components/nodes/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { handleError } from '@/lib/error/handle';
-import { cn } from '@/lib/utils';
-import { useReactFlow } from '@xyflow/react';
-import { Loader2Icon } from 'lucide-react';
-import { type FormEventHandler, useState } from 'react';
-import { Tweet } from 'react-tweet';
-import type { TweetNodeProps } from '.';
+import { getTweetData } from "@/app/actions/tweet/get";
+import { NodeLayout } from "@/components/nodes/layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { handleError } from "@/lib/error/handle";
+import { cn } from "@/lib/utils";
+import { useReactFlow } from "@xyflow/react";
+import { Loader2Icon } from "lucide-react";
+import { type FormEventHandler, useState } from "react";
+import { Tweet } from "react-tweet";
+import type { TweetNodeProps } from ".";
 
 type TweetPrimitiveProps = TweetNodeProps & {
   title: string;
@@ -20,7 +20,7 @@ export const TweetPrimitive = ({
   type,
   title,
 }: TweetPrimitiveProps) => {
-  const [tweetId, setTweetId] = useState('');
+  const [tweetId, setTweetId] = useState("");
   const { updateNodeData } = useReactFlow();
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +35,7 @@ export const TweetPrimitive = ({
 
     try {
       const response = await getTweetData(tweetId);
-      if ('error' in response) {
+      if ("error" in response) {
         throw new Error(response.error);
       }
 
@@ -48,7 +48,7 @@ export const TweetPrimitive = ({
         },
       });
     } catch (error) {
-      handleError('Error fetching tweet', error);
+      handleError("Error fetching tweet", error);
     } finally {
       setLoading(false);
     }
@@ -59,8 +59,8 @@ export const TweetPrimitive = ({
       {data.content?.id ? (
         <div
           className={cn(
-            '[&_.react-tweet-theme]:m-0!',
-            '[&_.react-tweet-theme]:rounded-3xl!'
+            "[&_.react-tweet-theme]:m-0!",
+            "[&_.react-tweet-theme]:rounded-3xl!"
           )}
         >
           <Tweet id={data.content.id} />
@@ -75,7 +75,7 @@ export const TweetPrimitive = ({
             className="rounded-full"
           />
           <Button type="submit" className="rounded-full" disabled={loading}>
-            {loading ? <Loader2Icon className="animate-spin" /> : 'Submit'}
+            {loading ? <Loader2Icon className="animate-spin" /> : "Submit"}
           </Button>
         </form>
       )}

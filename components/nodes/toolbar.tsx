@@ -1,7 +1,7 @@
-import { NodeToolbar as NodeToolbarRaw, useReactFlow } from '@xyflow/react';
-import { Position } from '@xyflow/react';
-import { Fragment, type ReactNode } from 'react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import { NodeToolbar as NodeToolbarRaw, useReactFlow } from "@xyflow/react";
+import { Position } from "@xyflow/react";
+import { Fragment, type ReactNode } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 type NodeToolbarProps = {
   id: string;

@@ -1,35 +1,41 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react';
-import { useTheme } from 'next-themes';
+} from "@/components/ui/dropdown-menu";
+import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const themes = [
   {
-    label: 'Light',
+    label: "Light",
     icon: SunIcon,
-    value: 'light',
+    value: "light",
   },
   {
-    label: 'Dark',
+    label: "Dark",
     icon: MoonIcon,
-    value: 'dark',
+    value: "dark",
   },
   {
-    label: 'System',
+    label: "System",
     icon: MonitorIcon,
-    value: 'system',
+    value: "system",
   },
 ];
 
 export const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div>
@@ -41,9 +47,10 @@ export const ThemeSwitcher = () => {
             aria-label="Select theme"
             className="rounded-full"
           >
-            {theme === 'light' && <SunIcon size={16} />}
-            {theme === 'dark' && <MoonIcon size={16} />}
-            {theme === 'system' && <MonitorIcon size={16} />}
+            {mounted && theme === "light" && <SunIcon size={16} />}
+            {mounted && theme === "dark" && <MoonIcon size={16} />}
+            {mounted && theme === "system" && <MonitorIcon size={16} />}
+            {!mounted && <MonitorIcon size={16} />}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="min-w-32">
