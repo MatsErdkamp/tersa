@@ -42,3 +42,7 @@ next-env.d.ts
 
 # react.email
 .react-email/
+
+
+#partykit
+.partykit/
