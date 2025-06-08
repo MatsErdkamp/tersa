@@ -261,8 +261,6 @@ const ProjectCanvas = ({ children, userData, ...props }: CanvasProps) => {
   const lastKnownEdgesLength = useRef(0);
   contentRef.current = content;
 
-  // Removed save function - PartyKit server now handles all database writes
-
   useEffect(() => {
     const ydoc = new Y.Doc();
     ydocRef.current = ydoc;
@@ -290,39 +288,10 @@ const ProjectCanvas = ({ children, userData, ...props }: CanvasProps) => {
     const provider = providerRef.current;
     awarenessRef.current = provider.awareness;
 
-    // Debug logging
-    // console.log(`🚀 Joining PartyKit room: ${ROOM_NAME}`);
-    // console.log(`🌐 PartyKit Host: ${PARTYKIT_HOST} (${process.env.NODE_ENV})`);
-    // console.log(`👤 Client ID: ${ydoc.clientID}`);
-    // console.log(`🏠 Project Owner: ${project?.userId}`);
-    // console.log(`📋 Project Members:`, project?.members);
-
-    // provider.on("status", (event: any) => {
-    //   console.log(`📡 PartyKit Status:`, event);
-    // });
-
-    // provider.on("sync", (isSynced: boolean) => {
-    //   console.log(`🔄 PartyKit synced:`, isSynced);
-    // });
-
-    // provider.on("connection-error", (error: any) => {
-    //   console.error(`❌ PartyKit Connection Error:`, error);
-    // });
-
-    // provider.on("connection-close", (event: any) => {
-    //   console.warn(`🔌 PartyKit Connection Closed:`, event);
-    // });
-
-    // console.log(`🔌 PartyKit provider connecting...`);
-
     const yjsNodesObserver = (
       events: Y.YEvent<any>[],
       transaction: Y.Transaction
     ) => {
-      // console.log(
-      //   `🔄 Nodes update received from client: ${transaction.origin}, my client: ${ydocRef.current?.clientID}`
-      // );
-
       if (
         !yNodesRef.current ||
         transaction.origin === ydocRef.current?.clientID
@@ -353,10 +322,6 @@ const ProjectCanvas = ({ children, userData, ...props }: CanvasProps) => {
       events: Y.YEvent<any>[],
       transaction: Y.Transaction
     ) => {
-      // console.log(
-      //   `🔗 Edges update received from client: ${transaction.origin}, my client: ${ydocRef.current?.clientID}`
-      // );
-
       if (
         !yEdgesRef.current ||
         transaction.origin === ydocRef.current?.clientID
@@ -388,56 +353,31 @@ const ProjectCanvas = ({ children, userData, ...props }: CanvasProps) => {
 
     provider.on("synced", (event: { synced: boolean }) => {
       if (event.synced && yNodesRef.current && yEdgesRef.current) {
-        if (
-          yNodesRef.current.length === 0 &&
-          yEdgesRef.current.length === 0 &&
-          !hasInitialized.current
-        ) {
-          const currentContent = contentRef.current;
-          const initialContentNodes =
-            initialNodes ?? currentContent?.nodes ?? [];
-          const initialContentEdges =
-            initialEdges ?? currentContent?.edges ?? [];
+        // PartyKit is now synced - trust its state completely
+        // The server has already handled any database initialization
+        console.log("🔄 Client synced with PartyKit, updating local state");
 
-          if (
-            initialContentNodes.length > 0 ||
-            initialContentEdges.length > 0
-          ) {
-            ydoc.transact(() => {
-              initialContentNodes.forEach((node) => {
-                yNodesRef.current!.push([reactFlowNodeToYMap(node)]);
-              });
-              initialContentEdges.forEach((edge) => {
-                yEdgesRef.current!.push([reactFlowEdgeToYMap(edge)]);
-              });
-            }, ydocRef.current?.clientID);
-          }
+        const nodesLength = yNodesRef.current.length;
+        const edgesLength = yEdgesRef.current.length;
+
+        // Don't update if YJS is empty but we have content and are already initialized
+        const shouldPreventNodesUpdate =
+          nodesLength === 0 &&
+          lastKnownNodesLength.current > 0 &&
+          hasInitialized.current;
+        const shouldPreventEdgesUpdate =
+          edgesLength === 0 &&
+          lastKnownEdgesLength.current > 0 &&
+          hasInitialized.current;
+
+        if (!shouldPreventNodesUpdate) {
+          setNodes(yNodesRef.current.toArray().map(yMapToReactFlowNode));
+          lastKnownNodesLength.current = nodesLength;
         }
 
-        // Only set state if arrays are not null and we're not preventing a wipe
-        if (yNodesRef.current && yEdgesRef.current) {
-          const nodesLength = yNodesRef.current.length;
-          const edgesLength = yEdgesRef.current.length;
-
-          // Don't update if YJS is empty but we have content and are already initialized
-          const shouldPreventNodesUpdate =
-            nodesLength === 0 &&
-            lastKnownNodesLength.current > 0 &&
-            hasInitialized.current;
-          const shouldPreventEdgesUpdate =
-            edgesLength === 0 &&
-            lastKnownEdgesLength.current > 0 &&
-            hasInitialized.current;
-
-          if (!shouldPreventNodesUpdate) {
-            setNodes(yNodesRef.current.toArray().map(yMapToReactFlowNode));
-            lastKnownNodesLength.current = nodesLength;
-          }
-
-          if (!shouldPreventEdgesUpdate) {
-            setEdges(yEdgesRef.current.toArray().map(yMapToReactFlowEdge));
-            lastKnownEdgesLength.current = edgesLength;
-          }
+        if (!shouldPreventEdgesUpdate) {
+          setEdges(yEdgesRef.current.toArray().map(yMapToReactFlowEdge));
+          lastKnownEdgesLength.current = edgesLength;
         }
 
         hasInitialized.current = true;
